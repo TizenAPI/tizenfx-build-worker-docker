@@ -14,9 +14,8 @@ RUN \
   && apt-get install -y --no-install-recommends mono-devel ca-certificates-mono
 
 # Install required python modules
-RUN \
-  wget https://bootstrap.pypa.io/get-pip.py && python get-pip.py
-RUN \
-  pip2 install PyGithub
+RUN wget https://bootstrap.pypa.io/get-pip.py && python get-pip.py && rm -f get-pip.py
+RUN pip2 install PyGithub
 
 # Install DocFX
+ADD docfx.tar.gz /usr/share/docfx
