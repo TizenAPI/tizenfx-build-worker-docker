@@ -4,6 +4,9 @@ ARG DEBIAN_FRONTEND=noninteractive
 ENV DOTNET_CLI_TELEMETRY_OPTOUT 1
 ENV WORKDIR /home/worker
 
+# Add jenkins user
+RUN adduser --quiet jenkins
+
 WORKDIR $WORKDIR
 
 # Install Mono
