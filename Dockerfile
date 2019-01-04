@@ -2,7 +2,8 @@ FROM microsoft/dotnet:2.1-sdk
 
 ARG DEBIAN_FRONTEND=noninteractive
 ENV DOTNET_CLI_TELEMETRY_OPTOUT 1
-ENV WORKDIR /home/worker
+ENV HOME /home/jenkins
+ENV WORKDIR /home/jenkins
 
 # Add jenkins user
 RUN adduser --quiet jenkins
