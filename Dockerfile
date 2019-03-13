@@ -17,9 +17,11 @@ RUN \
   && apt-get clean && apt-get update \
   && apt-get install -y --no-install-recommends mono-devel msbuild ca-certificates-mono
 
-# Install required python modules
-RUN wget https://bootstrap.pypa.io/get-pip.py && python get-pip.py && rm -f get-pip.py
-RUN pip2 install PyGithub
+# Install Python3
+RUN apt-get install -y --no-install-recommends python3 python3-pip
+RUN pip3 install --no-cache-dir setuptools
+RUN pip3 install --no-cache-dir pygithub
+RUN pip3 install --no-cache-dir boto3
 
 # Install DocFX
 ADD docfx.tar.gz /usr/share/docfx
