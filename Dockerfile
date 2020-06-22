@@ -25,3 +25,4 @@ RUN pip3 install --no-cache-dir boto3
 
 # Install DocFX
 ADD docfx.tar.gz /usr/share/docfx
+RUN chown -R jenkins /usr/share/docfx
