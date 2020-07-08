@@ -24,13 +24,16 @@ RUN pip3 install --no-cache-dir setuptools
 RUN pip3 install --no-cache-dir pygithub
 RUN pip3 install --no-cache-dir boto3
 
+# Install Node.js
+RUN apt-get install -y --no-install-recommends nodejs
+
 # Install DocFX
 RUN apt-get install -y --no-install-recommends unzip
 RUN \
   wget --no-check-certificate -P /tmp https://github.com/dotnet/docfx/releases/download/v${DOCFX_VER}/docfx.zip \
   && mkdir /usr/share/docfx \
   && unzip /tmp/docfx.zip -d /usr/share/docfx \
-  && echo '#!/bin/bash\nmono /usr/share/docfx/docfx.exe $@' > /usr/bin/docfx \
+  && echo '#!/bin/bash\nulimit -n 65535\nmono --assembly-loader=strict /usr/share/docfx/docfx.exe $@' > /usr/bin/docfx \
+  && chmod +x /usr/bin/docfx \
   && chown -R ${USERNAME} /usr/share/docfx \
   && rm -f /tmp/docfx.zip
-
