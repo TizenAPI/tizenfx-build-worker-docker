@@ -12,28 +12,28 @@ RUN adduser --disabled-password --gecos "" ${USERNAME}
 
 WORKDIR $WORKDIR
 
-# Install Mono
+# Setup APT
 RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF \
   && echo "deb http://download.mono-project.com/repo/debian stable-buster main" | tee /etc/apt/sources.list.d/mono-official-stable.list \
-  && apt-get clean && apt-get update \
-  && apt-get install -y --no-install-recommends mono-devel msbuild ca-certificates-mono
+  && apt-get clean && apt-get update
 
-# Install Python3
-RUN apt-get install -y --no-install-recommends python3 python3-pip
+# Install packages
+RUN apt-get install -y --no-install-recommends \
+    nodejs unzip git-lfs \
+    mono-devel msbuild ca-certificates-mono \
+    python3 python3-pip
+
+# Install python modules
 RUN pip3 install --no-cache-dir setuptools
 RUN pip3 install --no-cache-dir pygithub
 RUN pip3 install --no-cache-dir boto3
 
-# Install Node.js
-RUN apt-get install -y --no-install-recommends nodejs
-
 # Install DocFX
-RUN apt-get install -y --no-install-recommends unzip
-RUN \
-  wget --no-check-certificate -P /tmp https://github.com/dotnet/docfx/releases/download/v${DOCFX_VER}/docfx.zip \
+RUN wget --no-check-certificate -P /tmp https://github.com/dotnet/docfx/releases/download/v${DOCFX_VER}/docfx.zip \
   && mkdir /usr/share/docfx \
   && unzip /tmp/docfx.zip -d /usr/share/docfx \
   && echo '#!/bin/bash\nulimit -n 65535\nmono --assembly-loader=strict /usr/share/docfx/docfx.exe $@' > /usr/bin/docfx \
   && chmod +x /usr/bin/docfx \
   && chown -R ${USERNAME} /usr/share/docfx \
   && rm -f /tmp/docfx.zip
+
