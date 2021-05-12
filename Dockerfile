@@ -2,11 +2,15 @@ FROM mcr.microsoft.com/dotnet/core/sdk:3.0
 
 ARG DEBIAN_FRONTEND=noninteractive
 ENV DOTNET_CLI_TELEMETRY_OPTOUT 1
+ENV USERNAME=jenkins
+ENV USERGROUP=jenkins
+ENV USERID=2000
 ENV HOME /home/jenkins
 ENV WORKDIR /home/jenkins
 
 # Add jenkins user
-RUN adduser --quiet -u 2000 -g 2000 jenkins
+RUN addgroup --gid ${USERID} ${USERGROUP}
+RUN adduser --uid ${USERID} --gid ${USERID} --disabled-password --gecos "" ${USERNAME}
 RUN chmod 775 $HOME
 
 WORKDIR $WORKDIR
