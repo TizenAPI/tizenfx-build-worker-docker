@@ -7,6 +7,7 @@ ENV WORKDIR /home/jenkins
 
 # Add jenkins user
 RUN adduser --quiet jenkins
+RUN chmod 775 $HOME
 
 WORKDIR $WORKDIR
 
