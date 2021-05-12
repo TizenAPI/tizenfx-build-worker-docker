@@ -8,7 +8,7 @@ ENV WORKDIR /home/${USERNAME}
 ENV DOCFX_VER 2.56.1
 
 # Add jenkins user
-RUN adduser --disabled-password --gecos "" ${USERNAME}
+RUN adduser -u 2000 -g 2000 --disabled-password --gecos "" ${USERNAME}
 RUN chmod 775 $HOME
 
 WORKDIR $WORKDIR
