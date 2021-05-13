@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/core/sdk:3.1
+FROM mcr.microsoft.com/dotnet/sdk:5.0
 
 ARG DEBIAN_FRONTEND=noninteractive
 ENV DOTNET_CLI_TELEMETRY_OPTOUT 1
@@ -7,7 +7,8 @@ ENV USERGROUP=jenkins
 ENV USERID=2000
 ENV HOME /home/${USERNAME}
 ENV WORKDIR /home/${USERNAME}
-ENV DOCFX_VER 2.56.1
+ENV DOCFX_VER 2.57.2
+ENV MONO_VER 6.12.0
 
 # Add jenkins user
 RUN addgroup --gid ${USERID} ${USERGROUP}
@@ -17,9 +18,10 @@ RUN chmod 775 $HOME
 WORKDIR $WORKDIR
 
 # Setup APT
+RUN apt-get update && apt-get install -y --no-install-recommends gnupg
 RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF \
-  && echo "deb http://download.mono-project.com/repo/debian stable-buster main" | tee /etc/apt/sources.list.d/mono-official-stable.list \
-  && apt-get clean && apt-get update
+  && echo "deb http://download.mono-project.com/repo/debian stable-buster/snapshots/$MONO_VER main" | tee /etc/apt/sources.list.d/mono-official-stable.list \
+  && apt-get update
 
 # Install packages
 RUN apt-get install -y --no-install-recommends \
