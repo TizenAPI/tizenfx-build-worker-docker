@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/sdk:6.0
+FROM mcr.microsoft.com/dotnet/sdk:7.0
 
 ARG DEBIAN_FRONTEND=noninteractive
 ENV DOTNET_CLI_TELEMETRY_OPTOUT 1
@@ -7,7 +7,7 @@ ENV USERGROUP=jenkins
 ENV USERID=2000
 ENV HOME /home/${USERNAME}
 ENV WORKDIR /home/${USERNAME}
-ENV DOCFX_VER 2.57.2
+ENV DOCFX_VER 2.61.0
 ENV MONO_VER 6.12.0
 
 # Add jenkins user
@@ -35,10 +35,10 @@ RUN pip3 install --no-cache-dir pygithub
 RUN pip3 install --no-cache-dir boto3
 
 # Install DocFX
-RUN wget --no-check-certificate -P /tmp https://github.com/dotnet/docfx/releases/download/v${DOCFX_VER}/docfx.zip \
+RUN wget --no-check-certificate -P /tmp https://github.com/dotnet/docfx/releases/download/v${DOCFX_VER}/docfx-linux-x64-v${DOCFX_VER}.zip \
   && mkdir /usr/share/docfx \
-  && unzip /tmp/docfx.zip -d /usr/share/docfx \
-  && echo '#!/bin/bash\nulimit -n 65535\nmono --assembly-loader=strict /usr/share/docfx/docfx.exe $@' > /usr/bin/docfx \
+  && unzip /tmp/docfx-linux-x64-v${DOCFX_VER}.zip -d /usr/share/docfx \
+  && echo '#!/bin/bash\nulimit -n 65535\n/usr/share/docfx/docfx' > /usr/bin/docfx \
   && chmod +x /usr/bin/docfx \
   && chown -R ${USERNAME} /usr/share/docfx \
   && rm -f /tmp/docfx.zip

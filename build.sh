@@ -4,7 +4,7 @@ SCRIPT_FILE=$(readlink -f $0)
 SCRIPT_DIR=$(dirname $SCRIPT_FILE)
 
 NAME=tizendotnet/tizenfx-build-worker
-TAG=2.2
+TAG=2.4
 
 if [ ! -z $1 ]; then
   TAG=$1
