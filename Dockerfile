@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/sdk:7.0
+FROM mcr.microsoft.com/dotnet/sdk:6.0
 
 ARG DEBIAN_FRONTEND=noninteractive
 ENV DOTNET_CLI_TELEMETRY_OPTOUT 1
@@ -27,7 +27,8 @@ RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E03280
 RUN apt-get install -y --no-install-recommends \
     nodejs unzip git-lfs \
     mono-devel msbuild ca-certificates-mono \
-    python3 python3-pip
+    python3 python3-pip \
+    vim
 
 # Install python modules
 RUN pip3 install --no-cache-dir setuptools
@@ -35,11 +36,5 @@ RUN pip3 install --no-cache-dir pygithub
 RUN pip3 install --no-cache-dir boto3
 
 # Install DocFX
-RUN wget --no-check-certificate -P /tmp https://github.com/dotnet/docfx/releases/download/v${DOCFX_VER}/docfx-linux-x64-v${DOCFX_VER}.zip \
-  && mkdir /usr/share/docfx \
-  && unzip /tmp/docfx-linux-x64-v${DOCFX_VER}.zip -d /usr/share/docfx \
-  && echo '#!/bin/bash\nulimit -n 65535\n/usr/share/docfx/docfx' > /usr/bin/docfx \
-  && chmod +x /usr/bin/docfx \
-  && chown -R ${USERNAME} /usr/share/docfx \
-  && rm -f /tmp/docfx.zip
-
+RUN dotnet tool install -g docfx --version $DOCFX_VER
+ENV PATH="$PATH:/home/jenkins/.dotnet/tools"
